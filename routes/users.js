@@ -35,6 +35,12 @@ router.get("/:email",(req,res)=>{
     res.send(filtered_users);
 });
 
+// GET users with a particular Last Name eg. 'Smith'
+router.get("/lastName/:lastName",(req,res)=>{
+    const lastName = req.params.lastName;
+    let filtered_lastname = users.filter((user) => user.lastName === lastName);
+    res.send(filtered_lastname);
+});
 
 // POST request: Create a new user
 router.post("/",(req,res)=>{
@@ -79,4 +85,19 @@ router.delete("/:email", (req, res) => {
     res.send(`User with the email  ${email} deleted.`);
   });
 
+  //sorting users by date of birth
+  function getDateFromString(strDate) {
+    let [dd,mm,yyyy] = strDate.split('-')
+    return new Date(yyyy+"/"+mm+"/"+dd);
+}
+    
+// console.log(sorted_users);
+router.get("/sort",(req,res)=>{
+    let sorted_users=users.sort(function(a, b) {
+        let d1 = getDateFromString(a.DOB);
+        let d2 = getDateFromString(b.DOB);
+            return d1-d2;
+          });
+    res.send(sorted_users);
+});
 module.exports=router;
